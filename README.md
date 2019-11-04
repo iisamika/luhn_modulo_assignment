@@ -16,17 +16,14 @@ was also the fact that two of the banks used seven numbers in the first part of 
 instead of six which the rest of the banks used but this was a relative easy to solve using a if statement checking if the first number
 of the code corresponded with the parameters in the if statement and then used the correct for loop to splice in zeros.
 
-The third problem were the indentifying numbers for the banks. There were single digit identifiers and two digit identifiers.
+The third problem were the identifying numbers for the banks. There were single digit identifiers and two digit identifiers.
 This problem I solved by using a switch case statement for the sake of readablity, the class receives the same number that was input
 into the input field and then splits and slices it so that only the first two numbers remain of the original code. This is then used to
-check if the number matches any of the cases and if not it produces a message saying the bank indentifier was incorrect. The bank identifiers
-which used two numbers instead of one have their own switch case statement inside the main switch case statement. This is because
-in the main switch case statement we only need to check the first number and if that number is "3" then and only then does the
+check if the number matches any of the cases and if not it produces a message saying the bank identifier was incorrect. The bank identifiers which used two numbers instead of one have their own switch case statement inside the main switch case statement. This is because in the main switch case statement we only need to check the first number and if that number is "3" then and only then does the
 program go through the switch case that determines which of the two digit banks is in question.
 
 I think that this program could be improved by using a some type of loop instead of the switch case that I ended up using. Also the if
 statement I used in adding the zeros could probably have a different solution. Also I had to compromise in the object oriented part quite
-a lot since I have been doing mostly functional programming and these compromises can be seen in the code as pure functions. This just means I need
-more practise in the object oriented side of programming.
+a lot since I have been doing mostly functional programming and these compromises can be seen in the code as pure functions. This just means I need more practise in the object oriented side of programming.
 
 Feedback is appreciated.
