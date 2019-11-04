@@ -119,7 +119,7 @@ class Banks {
 }
 
 function bankIdentifier(bankName)   {
-    document.getElementById('bankName').innerHTML = (bankName);
+    document.getElementById('bankName').innerHTML = "Name of the bank: " + (bankName);
 }
 
 function buttonPressed()    {
