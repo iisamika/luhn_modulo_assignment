@@ -18,7 +18,7 @@ of the code corresponded with the parameters in the if statement and then used t
 
 The third problem were the indentifying numbers for the banks. There were single digit identifiers and two digit identifiers.
 This problem I solved by using a switch case statement for the sake of readablity, the class receives the same number that was input
-into the input field and then splits and splices it so that only the first two numbers remain of the original code. This is then used to
+into the input field and then splits and slices it so that only the first two numbers remain of the original code. This is then used to
 check if the number matches any of the cases and if not it produces a message saying the bank indentifier was incorrect. The bank identifiers
 which used two numbers instead of one have their own switch case statement inside the main switch case statement. This is because
 in the main switch case statement we only need to check the first number and if that number is "3" then and only then does the
