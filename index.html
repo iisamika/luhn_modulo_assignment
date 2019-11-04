@@ -1,0 +1,61 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>The HTML5 Herald</title>
+  <meta name="description" content="The HTML5 Herald">
+  <meta name="author" content="SitePoint">
+
+  <link rel="stylesheet" href="css/styles.css?v=1.0">
+
+</head>
+
+<body>
+    <form name="form1">
+        <div>
+            <div>
+                <label name="shortCode">Input shortened code</label>
+            </div>
+            <div>
+                <input type="text" class="inputSpace" id="shortCode" name="shortCode" onchange="" onkeyup=""></input>
+            </div>
+        </div>
+        <div>
+            <input type="button" value="Convert Number" onclick="buttonPressed()"></input>
+        </div>
+        <div>
+            <div>
+                <label name="fullCode">Full Code</label>
+            </div>
+            <div>
+                <input type = "text" id = "fullCode" class="inputSpace" name = "fullCode" readonly></input>
+            </div>
+        </div>
+        <div>
+            <div>
+                <label name="partCode">Partial Code</label>
+            </div>
+            <div>
+                <input type="text" id="partCode" class="inputSpace" name="partCode" readonly>
+            </div>
+        </div>
+        <div>
+            <div>
+                <label name="checkDigit">Check Digit</label>
+            </div>
+            <div>
+                <input type="text" id="checkDigit" class="inputSpace" name="checkDigit" readonly>
+            </div>
+        </div>
+        <div>
+            <span id="isValid" name="isValid"></span>
+        </div>
+        <div>
+            <span id="bankName" name="bankName"></span>
+        </div>
+    </form>
+    <script src="js/scripts.js"></script>
+</body>
+</html>
