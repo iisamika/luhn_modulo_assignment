@@ -1,20 +1,20 @@
-class Data  {
-    constructor(shortCode)   {
-        this.shortCode = shortCode;
-    }
-
-    addZeroes() {
-        let splitShortCode = this.shortCode.split("");
+function abstraction(shortCode)   {
+    this.shortCode = shortCode;
+    
+    let machineReadable = function(shortCode) {
+        let splitShortCode = shortCode.split("");
         let checkSplitCode = splitShortCode.slice(0, 1).toString();
+        let bankID = ["1","2","3","6","8"];
+        let bankID2 = ["4","5"];
 
-        if(checkSplitCode === "1"|| checkSplitCode === "2"|| checkSplitCode === "3"|| checkSplitCode === "6"|| checkSplitCode === "8")  {
+        if(bankID.includes(checkSplitCode))  {
             for(let i = splitShortCode.length; i <= 13; i++)    {
                 splitShortCode.splice( 6, 0, "0" );
             }
             let joinShortCode = splitShortCode.join("");
             return onChange(joinShortCode);
         }
-        else if(checkSplitCode === "4"|| checkSplitCode === "5")   {
+        else if(bankID2.includes(checkSplitCode))   {
             for(let i = splitShortCode.length; i <= 13; i++)    {
                 splitShortCode.splice( 7, 0, "0" );
             }
@@ -27,108 +27,49 @@ class Data  {
             document.form1.checkDigit.value = "Incorrect check digit!";
         }
     }
-}
 
-class Banks {
-    constructor(bankNumberData) {
-        this.bankNumberData = bankNumberData;
+    let checkWhichBank = function(checkBankNumber)   {
+        let bankName = {
+            '1': 'Nordea',
+            '2': 'Nordea',
+            '31': 'Handelsbanken',
+            '33': 'Skandinaviska Enskilda Banken', 
+            '34': 'Danske Bank', 
+            '36': 'Tapiola Pankki', 
+            '37': 'DnB NOR Bank ASA', 
+            '38': 'Swedbank',
+            '39': 'S-Pankki',
+            '4': 'Säästöpankki, Paikallisosuuspankki tai Aktia',
+            '5': 'Osuuspankki, OKO tai Okopankki',
+            '6': 'Ålandsbanken',
+            '8': 'Sampo Pankki',
+            'default': 'Bank identifying number is incorrect!'
+        };
+        return bankIdentifier(bankName[checkBankNumber] || bankName['default']);
     }
 
-    checkWhichBank()    {
-        let splitShortCode = this.bankNumberData.split("");
-        let checkBankNumber = splitShortCode.slice(0, 2);
-        switch  (checkBankNumber[0])   {
-            case "1":
-            case "2":   {
-                let bankName = "Nordea";
-                bankIdentifier(bankName);
-                break;
-            }
-            case "3":   {
-                switch  (checkBankNumber[1])    {
-                    case "1":   {
-                        let bankName = "Handelsbanken";
-                        bankIdentifier(bankName);
-                        break;
-                    }
-                    case "3":   {
-                        let bankName = "Skandinaviska Enskilda Banken";
-                        bankIdentifier(bankName);
-                        break;
-                    }
-                    case "4":   {
-                        let bankName = "Danske Bank";
-                        bankIdentifier(bankName);
-                        break
-                    }
-                    case "6":   {
-                        let bankName = "Tapiola Pankki";
-                        bankIdentifier(bankName);
-                        break
-                    }
-                    case "7":   {
-                        let bankName = "DnB NOR Bank ASA";
-                        bankIdentifier(bankName);
-                        break
-                    }
-                    case "8":   {
-                        let bankName = "Swedbank";
-                        bankIdentifier(bankName);
-                        break
-                    }
-                    case "9":   {
-                        let bankName = "S-Pankki";
-                        bankIdentifier(bankName);
-                        break
-                    }
-                    default:    {
-                        let bankName = "Bank identifying number is incorrect!";
-                        bankIdentifier(bankName);
-                        break
-                    }
-                }
-                break;
-            }
-            case "4":   {
-                let bankName = "Säästöpankki, Paikallisosuuspankki tai Aktia";
-                bankIdentifier(bankName);
-                break;
-            }
-            case "5":   {
-                let bankName = "Osuuspankki, OKO tai Okopankki";
-                bankIdentifier(bankName);
-                break;
-            }
-            case "6":   {
-                let bankName = "Ålandsbanken";
-                bankIdentifier(bankName);
-                break;
-            }
-            case "8":   {
-                let bankName = "Sampo Pankki";
-                bankIdentifier(bankName);
-                break;
-            }
-            default:    {
-                let bankName = "Bank identifying number is incorrect!";
-                bankIdentifier(bankName);
-                break
-            }
+    this.bankData = function() {
+        machineReadable(shortCode);
+        let splitShortCode = shortCode.split("");
+        if(splitShortCode[0] == "3")    {
+            let checkBankNumber = splitShortCode.slice(0, 2).join("");
+            checkWhichBank(checkBankNumber.toString());
+        }
+        else    {
+            let checkBankNumber = splitShortCode.slice(0, 1);
+            checkWhichBank(checkBankNumber.toString());
         }
     }
 }
 
 function bankIdentifier(bankName)   {
-    document.getElementById('bankName').innerHTML = "Name of the bank: " + (bankName);
+    document.getElementById('bankName').textContent = "Name of the bank: " + (bankName);
 }
 
 function buttonPressed()    {
     let inputShortCode = document.form1.shortCode.value.replace(/-/g,'');
-    let sendShortCode = new Data(inputShortCode);
-    let sendBankCode = new Banks(inputShortCode);
-
-    sendShortCode.addZeroes();
-    sendBankCode.checkWhichBank();
+    let sendShortCode = new abstraction(inputShortCode);
+    sendShortCode.bankData();
 }
 
 function luhnCheckSum(code) {
@@ -180,7 +121,7 @@ function onChange(joinShortCode) {
 function checkValidity(fullCode)    {
     let isValid = luhnValidate(fullCode);
     let htmlNoCode = "&nbsp;";
-    let htmlValid = "<b><font color=green>This code is valid.</font></b>";
-    let htmlInValid = "<b><font color=red>This code is not valid.</font></b>";
-    document.getElementById('isValid').innerHTML = (fullCode == "") ? htmlNoCode : isValid ? htmlValid : htmlInValid
+    let htmlValid = "This code is valid.";
+    let htmlInValid = "This code is not valid.";
+    document.getElementById('isValid').textContent = (fullCode == "") ? htmlNoCode : isValid ? htmlValid : htmlInValid
 }
