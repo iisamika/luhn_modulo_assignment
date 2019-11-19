@@ -131,4 +131,4 @@ class FinnishBankAccount    {
     }
 }
 
-let account = new FinnishBankAccount("333456-785");
+let account = new FinnishBankAccount("123456-785");
