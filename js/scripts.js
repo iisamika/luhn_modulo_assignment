@@ -1,8 +1,10 @@
-function abstraction(shortCode)   {
-    this.shortCode = shortCode;
-    
-    let machineReadable = function(shortCode) {
-        let splitShortCode = shortCode.split("");
+class FinnishBankNumber {
+    constructor(shortCode){
+        this.shortCode = shortCode;
+    }
+
+    machineReadableFormat(shortCode)   {
+        let splitShortCode = shortCode.replace(/-/g,'').split("");
         let checkSplitCode = splitShortCode.slice(0, 1).toString();
         let bankID = ["1","2","3","6","8"];
         let bankID2 = ["4","5"];
@@ -12,23 +14,22 @@ function abstraction(shortCode)   {
                 splitShortCode.splice( 6, 0, "0" );
             }
             let joinShortCode = splitShortCode.join("");
-            return onChange(joinShortCode);
+            return this.onChange(joinShortCode);
         }
         else if(bankID2.includes(checkSplitCode))   {
             for(let i = splitShortCode.length; i <= 13; i++)    {
                 splitShortCode.splice( 7, 0, "0" );
             }
             let joinShortCode = splitShortCode.join("");
-            return onChange(joinShortCode);
+            return this.onChange(joinShortCode);
         }
         else    {
-            document.form1.fullCode.value = "Incorrect bank account number!";
-            document.form1.partCode.value = "Incorrect bank account number!";
-            document.form1.checkDigit.value = "Incorrect check digit!";
+            console.log("Incorrect bank account number!");
+            console.log("Incorrect check digit!");
         }
     }
 
-    let checkWhichBank = function(checkBankNumber)   {
+    findBankName(newTinyCode)   {
         let bankName = {
             '1': 'Nordea',
             '2': 'Nordea',
@@ -45,83 +46,89 @@ function abstraction(shortCode)   {
             '8': 'Sampo Pankki',
             'default': 'Bank identifying number is incorrect!'
         };
-        return bankIdentifier(bankName[checkBankNumber] || bankName['default']);
+        return this.bankIdentifier(bankName[newTinyCode] || bankName['default']);
     }
 
-    this.bankData = function() {
-        machineReadable(shortCode);
-        let splitShortCode = shortCode.split("");
-        if(splitShortCode[0] == "3")    {
-            let checkBankNumber = splitShortCode.slice(0, 2).join("");
-            checkWhichBank(checkBankNumber.toString());
+    bankIdentifier(bankName)   {
+        console.log("Bank name: " + bankName);
+    }
+
+    onChange(joinShortCode) {
+        let fullCode = joinShortCode;
+        let partCode = fullCode.substring(0, fullCode.length - 1);
+        console.log(fullCode);
+        console.log(partCode);
+        this.checkValidity(fullCode);
+        return this.luhnCalculate(partCode);
+    }
+
+    luhnCalculate(partCode)   {
+        let checkSum = this.luhnCheckSum(partCode + "0");
+        return this.addCheckDigit(checkSum == 0 ? 0 : 10 - checkSum);
+    }
+
+    luhnCheckSum(code) {
+        let len = code.length;
+        let parity = len % 2;
+        let sum = 0;
+    
+        for (let i = len -1; i >= 0; i--)   {
+            let d = parseInt(code.charAt(i));
+            if(i % 2 == parity) {
+                d *=2
+            }
+    
+            if(d > 9)   {
+                d -= 9;
+            }
+    
+            sum += d;
+        }
+        return sum % 10;
+    }
+
+    addCheckDigit(checkSum)    {
+        let checkDigit = checkSum;
+        console.log(checkDigit, "Validation number");
+    }
+
+    checkValidity(fullCode)    {
+        let isValid = this.luhnValidate(fullCode);
+        let htmlNoCode = "&nbsp;";
+        let htmlValid = "This code is valid.";
+        let htmlInValid = "This code is not valid.";
+        console.log((fullCode == "") ? htmlNoCode : isValid ? htmlValid : htmlInValid);
+    }
+
+
+    luhnValidate(fullCode)    {
+        return this.luhnCheckSum(fullCode) == "0";
+    }
+}
+
+class FinnishBankAccount    {
+    constructor(tinyCode)   {
+        this.tinyCode = tinyCode;
+        this.slicedTinyCode = tinyCode.slice(0, 1);
+        this.newTinyCode = tinyCode.replace(/-/g,'').split("");
+        if(this.newTinyCode[0] == "3")    {
+            this.sendThisCode = this.newTinyCode.slice(0, 2).join("");
+            this.account = new FinnishBankNumber(tinyCode).machineReadableFormat(tinyCode);
+            this.callMethod2 = new FinnishBankNumber(this.sendThisCode).findBankName(this.sendThisCode);        
+        }
+        else if(this.newTinyCode[0] == "7" || this.newTinyCode[0] == "9" || this.newTinyCode[0] == "0" || this.newTinyCode.some(isNaN))    {
+            try {
+                throw new Error("Incorrect bank Identification number or NaN in account number");
+            } catch (error) {
+                console.log(error.message);
+            }
         }
         else    {
-            let checkBankNumber = splitShortCode.slice(0, 1);
-            checkWhichBank(checkBankNumber.toString());
+            this.sendThisCode = this.newTinyCode.slice(0, 1).join("");
+            this.account = new FinnishBankNumber(tinyCode).machineReadableFormat(tinyCode);
+            this.callMethod2 = new FinnishBankNumber(this.sendThisCode).findBankName(this.sendThisCode.toString());
         }
     }
 }
 
-function bankIdentifier(bankName)   {
-    document.getElementById('bankName').textContent = "Name of the bank: " + (bankName);
-}
-
-function buttonPressed()    {
-    let inputShortCode = document.form1.shortCode.value.replace(/-/g,'');
-    let sendShortCode = new abstraction(inputShortCode);
-    sendShortCode.bankData();
-}
-
-function luhnCheckSum(code) {
-    let len = code.length;
-    let parity = len % 2;
-    let sum = 0;
-
-    for (let i = len -1; i >= 0; i--)   {
-        let d = parseInt(code.charAt(i));
-        if(i % 2 == parity) {
-            d *=2
-        }
-
-        if(d > 9)   {
-            d -= 9;
-        }
-
-        sum += d;
-    }
-    return sum % 10;
-}
-
-function luhnCalculate(partCode)   {
-    let checkSum = luhnCheckSum(partCode + "0");
-    return addCheckDigit(checkSum == 0 ? 0 : 10 - checkSum);
-}
-
-function luhnValidate(fullCode)    {
-    return luhnCheckSum(fullCode) == "0";
-}
-
-function addCheckDigit(checkSum)    {
-    let checkDigit = checkSum;
-    document.form1.checkDigit.value = checkDigit;
-}
-
-
-function onChange(joinShortCode) {
-    let fullCode = joinShortCode;
-    let partCode = fullCode.substring(0, fullCode.length - 1);
-    luhnCalculate(partCode);
-    
-    document.form1.fullCode.value = fullCode;
-    document.form1.partCode.value = partCode;
-
-    checkValidity(fullCode);
-}
-
-function checkValidity(fullCode)    {
-    let isValid = luhnValidate(fullCode);
-    let htmlNoCode = "&nbsp;";
-    let htmlValid = "This code is valid.";
-    let htmlInValid = "This code is not valid.";
-    document.getElementById('isValid').textContent = (fullCode == "") ? htmlNoCode : isValid ? htmlValid : htmlInValid
-}
+let account = new FinnishBankAccount("333456-785");
