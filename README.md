@@ -5,7 +5,7 @@ or as a Object Oriented and HTML provided a quick "client side" and didn't need 
 
 The first problem I faced was the algorithm I was supposed to implement into the code. Before this assignment I had never heard of
 Luhns modulo 10, so I needed help from google and someone had infact made a tutorial on how to implement luhns modulo 10
-on JavaScript which I desided to use because figuring out how to implement the algorithm on my own would have taken too long.
+on JavaScript which I decided to use because figuring out how to implement the algorithm on my own would have taken too long.
 
 The second problem I faced was the class that was supposed to transform the short code format (looks like this: 123456-785)
 into the machine readable format (looks like this: 12345600000785). I solved this problem by removing the "-" character and then
